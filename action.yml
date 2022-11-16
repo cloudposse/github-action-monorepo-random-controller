@@ -1,23 +1,48 @@
-name: 'Example composite GitHub action'
-description: 'Example composite GitHub action'
-author: hello@cloudposse.com
-branding:
-  icon: 'file'
-  color: 'white'
+name: 'Monorepo random controller'
+description: 'Detect applications that have changes and not'
 inputs:
-  param1:
+  dir:
+    description: "Applications dir"
     required: true
-    description: "Input parameter placeholder"
-    default: "true"
 outputs:
-  result1:
-    description: "Output result placeholder"
-    value: "${{ steps.context.outputs.action-result }}"
+  changes:
+    description: "Applications that have changes"
+    value: ${{ toJson(fromJson(steps.controller.outputs.changes)) }}
+  no-changes:
+    description: "Applications that have no changes"
+    value: ${{ toJson(fromJson(steps.controller.outputs.no-changes)) }}
 runs:
   using: "composite"
   steps:
-    - id: context
+    - name: 'Install jq 1.6'
+      uses: dcarbone/install-jq-action@v1.0.1
+      with:
+        version: 1.6
+        force: 'true'
+
+    - name: Analize code
+      id: controller
       shell: bash
       run: |
-          echo "::set-output name=action-result::${{ inputs.param1 }}"
+        CHANGES=()
+        NO_CHANGES=()
+        
+        APPS=($(ls ${{ inputs.dir }}))
+        for i in "${APPS[@]}"
+        do
+            NUMBER=$(( $RANDOM % 100 ))
+            if [[ $NUMBER -ge 50 ]]; then
+                CHANGES+=(${i})
+            else
+                NO_CHANGES+=(${i})
+            fi
+        done
 
+        CHANGES_RESULT="$(echo ${CHANGES[@]} | jq --compact-output --raw-input 'split(" ")')"
+        NO_CHANGES_RESULT="$(echo ${NO_CHANGES[@]} | jq --compact-output --raw-input 'split(" ")')"
+        
+        echo "changes=${CHANGES_RESULT//\"/\\\"}"
+        echo "no-changes=${NO_CHANGES_RESULT//\"/\\\"}"
+        
+        echo "changes=${CHANGES_RESULT}" >> $GITHUB_OUTPUT
+        echo "no-changes=${NO_CHANGES_RESULT}" >> $GITHUB_OUTPUT
