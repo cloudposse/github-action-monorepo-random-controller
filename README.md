@@ -96,17 +96,20 @@ Feel free to use it as reference and starting point.
 
 
 <!-- markdownlint-disable -->
+
 ## Inputs
 
 | Name | Description | Default | Required |
 |------|-------------|---------|----------|
-| param1 | Input parameter placeholder | true | true |
+| dir | Applications dir | N/A | true |
+
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| result1 | Output result placeholder |
+| changes | Applications that have changes |
+| no-changes | Applications that have no changes |
 <!-- markdownlint-restore -->
 
 
