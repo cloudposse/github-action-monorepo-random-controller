@@ -8,7 +8,6 @@ outputs:
   apps:
     description: "Applications list"
     value: ${{ toJson(fromJson(steps.controller.outputs.apps)) }}
-
   changes:
     description: "Applications that have changes"
     value: ${{ toJson(fromJson(steps.controller.outputs.changes)) }}

@@ -42,8 +42,14 @@ jobs:
 
       - uses: nick-fields/assert-action@v1
         with:
-          expected: '[ "bar", "foo" ]'
-          actual: "${{ needs.test.outputs.apps }}"
+          expected: 'bar'
+          actual: ${{ fromJson(needs.test.outputs.apps)[0] }}
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'foo'
+          actual: ${{ fromJson(needs.test.outputs.apps)[1] }}
+
 
   teardown:
     runs-on: ubuntu-latest
