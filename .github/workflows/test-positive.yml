@@ -25,10 +25,11 @@ jobs:
       - uses: ./
         id: current
         with:
-          param1: 'true'
+          dir: ./test/apps
 
     outputs:
       result: "${{ steps.current.conclusion }}"
+      apps: "${{ steps.current.outputs.apps }}"
 
   assert:
     runs-on: ubuntu-latest
@@ -38,6 +39,17 @@ jobs:
         with:
           expected: 'success'
           actual: "${{ needs.test.outputs.result }}"
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'bar'
+          actual: ${{ fromJson(needs.test.outputs.apps)[0] }}
+
+      - uses: nick-fields/assert-action@v1
+        with:
+          expected: 'foo'
+          actual: ${{ fromJson(needs.test.outputs.apps)[1] }}
+
 
   teardown:
     runs-on: ubuntu-latest
