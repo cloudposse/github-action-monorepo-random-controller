@@ -46,7 +46,7 @@ runs:
         CHANGES_RESULT="$(echo ${CHANGES[@]} | jq --compact-output --raw-input 'split(" ")')"
         NO_CHANGES_RESULT="$(echo ${NO_CHANGES[@]} | jq --compact-output --raw-input 'split(" ")')"
         
-        echo "changes=${APPS_RESULT//\"/\\\"}"        
+        echo "apps=${APPS_RESULT//\"/\\\"}"        
         echo "changes=${CHANGES_RESULT//\"/\\\"}"
         echo "no-changes=${NO_CHANGES_RESULT//\"/\\\"}"
         
