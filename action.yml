@@ -5,6 +5,10 @@ inputs:
     description: "Applications dir"
     required: true
 outputs:
+  apps:
+    description: "Applications list"
+    value: ${{ toJson(fromJson(steps.controller.outputs.apps)) }}
+
   changes:
     description: "Applications that have changes"
     value: ${{ toJson(fromJson(steps.controller.outputs.changes)) }}
@@ -38,11 +42,14 @@ runs:
             fi
         done
 
+        APPS_RESULT="$(echo ${APPS[@]} | jq --compact-output --raw-input 'split(" ")')"
         CHANGES_RESULT="$(echo ${CHANGES[@]} | jq --compact-output --raw-input 'split(" ")')"
         NO_CHANGES_RESULT="$(echo ${NO_CHANGES[@]} | jq --compact-output --raw-input 'split(" ")')"
         
+        echo "changes=${APPS_RESULT//\"/\\\"}"        
         echo "changes=${CHANGES_RESULT//\"/\\\"}"
         echo "no-changes=${NO_CHANGES_RESULT//\"/\\\"}"
         
+        echo "apps=${APPS_RESULT}" >> $GITHUB_OUTPUT        
         echo "changes=${CHANGES_RESULT}" >> $GITHUB_OUTPUT
         echo "no-changes=${NO_CHANGES_RESULT}" >> $GITHUB_OUTPUT
