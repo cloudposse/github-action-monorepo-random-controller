@@ -11,6 +11,7 @@
 
 | Name | Description |
 |------|-------------|
+| apps | Applications list |
 | changes | Applications that have changes |
 | no-changes | Applications that have no changes |
 <!-- markdownlint-restore -->
