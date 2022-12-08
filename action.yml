@@ -1,5 +1,9 @@
 name: 'Monorepo random controller'
 description: 'Detect applications that have changes and not'
+author: hello@cloudposse.com
+branding:
+  icon: 'sliders'
+  color: 'white'
 inputs:
   dir:
     description: "Applications dir"
